@@ -14,7 +14,7 @@ font-weight: 700;
 font-style: normal;
 }
 select {
-  border: none;
+  border: solid 1px black;
   border-radius: 5px;
   padding: 10px;
 }
@@ -40,6 +40,8 @@ const worksiteDropdownWrapper = document.getElementById("worksites");
 const repName = document.getElementById("repName");
 const repNumber = document.getElementById("repNumber");
 const repEmail = document.getElementById("repEmail");
+const emailLink = document.getElementById("emailLink");
+
 
 let dataVar;
 fetch(url)
@@ -94,8 +96,10 @@ function displayRepInfo() {
       console.log(worksiteDropdown.value)
   for (var k = 0; k < dataVar.length; k++) {
     if (dataVar[k][1] == worksiteDropdown.value) {
-      repName.innerHTML = dataVar[k][2];       repNumber.innerHTML = dataVar[k][3];
+      repName.innerHTML = dataVar[k][2];
+      repNumber.innerHTML = dataVar[k][3];
       repEmail.innerHTML = dataVar[k][4];
+      emailLink.href = `mailto:${dataVar[k][4]}`;
     }
 }
 };
@@ -123,8 +127,8 @@ getData();
 </div>
 <div id="results">
   <h3>Your union rep is <span id="repName"></span></h3>
-  <p>You can contact them by phone on <span id="repNumber"</span></p>
-  <p>You can contact them by email on <span id="repEmail"</span></p>
+  <p>You can contact them by phone on <span id="repNumber"></span></p>
+  <p>You can contact them by email on <a href="" id="emailLink"><span id="repEmail"></span></a></p>
 </div>
 </body>
 </html>
