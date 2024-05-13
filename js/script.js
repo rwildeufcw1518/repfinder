@@ -18,7 +18,7 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     dataVar = data.values;
-    console.log(dataVar);
+    console.log(data);
   })
 .then(() => {
 function getData() {
@@ -66,6 +66,8 @@ function displayRepInfo() {
   repEmail.innerHTML = "";
       console.log(worksiteDropdown.value)
   for (var k = 0; k < dataVar.length; k++) {
+           console.log("Data Variable:" + dataVar[k][1]);
+           console.log("Dropdown Variable:" + worksiteDropdown.value);
     if (dataVar[k][1] == worksiteDropdown.value) {
       repName.innerHTML = dataVar[k][2];       repNumber.innerHTML = dataVar[k][3];
       repEmail.innerHTML = dataVar[k][4];
