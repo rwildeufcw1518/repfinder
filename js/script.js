@@ -18,6 +18,7 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     dataVar = data.values;
+    console.log(dataVar);
   })
 .then(() => {
 function getData() {
