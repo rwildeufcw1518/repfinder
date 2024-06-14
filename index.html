@@ -135,7 +135,7 @@ ${makeVCardTel()}
 ${makeVCardEmail()}
 ${makeVCardTimeStamp()}
 END:VCARD`;
-  downloadToFile(vcard, 'vcard.vcf', 'text/vcard');
+  downloadToFile(vcard, `${repName.innerHTML}.vcf`, 'text/vcard');
   console.log(vcard);
 }
     downloadButton.addEventListener('click', makeVCard);
