@@ -115,7 +115,9 @@ function displayRepInfo() {
       repEmail.innerHTML = dataVar[k][4];
     }
 }
-  const makeVCardVersion = () => `VERSION:3.0`;
+};
+
+const makeVCardVersion = () => `VERSION:3.0`;
 const makeVCardName = (name) => `FN:${repName.innerHTML}`;
 const makeVCardOrg = (org) => `ORG: UFCW 1518`;
 const makeVCardTitle = (title) => `TITLE: Union Rep`;
@@ -137,7 +139,6 @@ END:VCARD`;
   console.log(vcard);
 }
     downloadButton.addEventListener('click', makeVCard);
-};
   
 employerDropdown.addEventListener("change", filterWorksites);
 worksiteDropdown.addEventListener("change", displayRepInfo);
