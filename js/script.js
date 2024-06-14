@@ -18,7 +18,6 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     dataVar = data.values;
-    console.log(data);
   })
 .then(() => {
 function getData() {
@@ -39,6 +38,17 @@ employerDropdown.innerHTML = "";
 }
 
 getData();
+  
+function downloadToFile(content, filename, contentType) {
+  const a = document.createElement('a');
+  const file = new Blob([content], { type: contentType });
+
+  a.href = URL.createObjectURL(file);
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+}
 
 function filterWorksites() {
   worksiteDropdown.innerHTML = "";
@@ -57,22 +67,39 @@ function filterWorksites() {
       }
   displayRepInfo();
 }
-
-filterWorksites();
-
+  
 function displayRepInfo() {
   repName.innerHTML = "";
   repNumber.innerHTML = "";
   repEmail.innerHTML = "";
-      console.log(worksiteDropdown.value)
   for (var k = 0; k < dataVar.length; k++) {
-           console.log("Data Variable:" + dataVar[k][1]);
-           console.log("Dropdown Variable:" + worksiteDropdown.value);
     if (dataVar[k][1] == worksiteDropdown.value) {
       repName.innerHTML = dataVar[k][2];       repNumber.innerHTML = dataVar[k][3];
       repEmail.innerHTML = dataVar[k][4];
     }
 }
+  const makeVCardVersion = () => `VERSION:3.0`;
+const makeVCardName = (name) => `FN:${repName.innerHTML}`;
+const makeVCardOrg = (org) => `ORG: UFCW 1518`;
+const makeVCardTitle = (title) => `TITLE: Union Rep`;
+const makeVCardTel = (phone) => `TEL;TYPE=WORK,VOICE:${repNumber.innerHTML}`;
+const makeVCardEmail = (email) => `EMAIL:${repEmail.innerHTML}`;
+const makeVCardTimeStamp = () => `REV:${new Date().toISOString()}`;
+
+function makeVCard() {
+  let vcard = `BEGIN:VCARD
+${makeVCardVersion()}
+${makeVCardName()}
+${makeVCardOrg()}
+${makeVCardTitle()}
+${makeVCardTel()}
+${makeVCardEmail()}
+${makeVCardTimeStamp()}
+END:VCARD`;
+  downloadToFile(vcard, 'vcard.vcf', 'text/vcard');
+  console.log(vcard);
+}
+    downloadButton.addEventListener('click', makeVCard);
 };
   
 employerDropdown.addEventListener("change", filterWorksites);
