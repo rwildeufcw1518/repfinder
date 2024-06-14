@@ -24,93 +24,68 @@ input {
   border-radius: 5px;
   padding: 10px;
 }
+
+#downloadButton {
+  border: none;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #fec424;
+  font-weight: 700;
+}
 </style>
 <script src="https://kit.fontawesome.com/086226c8ec.js" crossorigin="anonymous"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-let spreadsheet_id = '1_p83tn3IUxvnLwZf_fmXo1zbEIOTS3TmeRG0r2V0Yr8';
-let tab_name = 'Sheet1'
-let api_key = 'AIzaSyCCSEN2cgB1g2Z3GjJYXqO9z1zghBwlf8s';
-let url = 'https://sheets.googleapis.com/v4/spreadsheets/' +
-           spreadsheet_id + '/values/' + tab_name +
-           '?alt=json&key=' + api_key;
-  
-const employerDropdown = document.getElementById("employer");
-const worksiteDropdown = document.getElementById("worksite");
-const worksiteDropdownWrapper = document.getElementById("worksites");
-const repName = document.getElementById("repName");
-const repNumber = document.getElementById("repNumber");
-const repEmail = document.getElementById("repEmail");
-const emailLink = document.getElementById("emailLink");
+'use strict';
 
+function downloadToFile(content, filename, contentType) {
+  const a = document.createElement('a');
+  const file = new Blob([content], { type: contentType });
 
-let dataVar;
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    dataVar = data.values;
-  })
-.then(() => {
-function getData() {
-let employerList = [""];
-employerDropdown.innerHTML = "";
-    for (i = 0; i < dataVar.length; i++) {
-      employerList[i] = (dataVar[i][0]);
-    }
-  let employerSet = new Set (employerList);
-  employerList = Array.from(employerSet);
-  for (j = 0; j < employerList.length; j++) {
-    let opt = document.createElement('option');
-    opt.value = employerList[j];
-    opt.innerHTML = employerList[j];
-    employerDropdown.appendChild(opt);
-}
-  filterWorksites();
+  a.href = URL.createObjectURL(file);
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
 }
 
-getData();
+function previewFile(event) {
+  let reader = new FileReader();
+  let file = event.target.files[0];
 
-function filterWorksites() {
-  worksiteDropdown.innerHTML = "";
-    let worksiteList = [];
-    for (var i = 0; i < dataVar.length; i++) {
-    if (dataVar[i][0] === employerDropdown.value) {
-        worksiteList.push(dataVar[i][1]);
-    }
-}
-    
-      for (j = 0; j < worksiteList.length; j++) {
-      let opt = document.createElement('option');
-      opt.value = worksiteList[j];
-      opt.innerHTML = worksiteList[j];
-      worksiteDropdown.appendChild(opt);
-      }
-  displayRepInfo();
+  reader.readAsDataURL(file);
+  reader.onloadend = () => (previewEl.src = reader.result);
 }
 
-filterWorksites();
+const makeVCardVersion = () => `VERSION:3.0`;
+const makeVCardInfo = (info) => `N:${info}`;
+const makeVCardName = (name) => `FN:${name}`;
+const makeVCardOrg = (org) => `ORG:${org}`;
+const makeVCardTitle = (title) => `TITLE:${title}`;
+const makeVCardPhoto = (img) => `PHOTO;TYPE=JPEG;ENCODING=b:[${img}]`;
+const makeVCardTel = (phone) => `TEL;TYPE=WORK,VOICE:${phone}`;
+const makeVCardAdr = (address) => `ADR;TYPE=WORK,PREF:;;${address}`;
+const makeVCardEmail = (email) => `EMAIL:${email}`;
+const makeVCardTimeStamp = () => `REV:${new Date().toISOString()}`;
 
-function displayRepInfo() {
-  repName.innerHTML = "";
-  repNumber.innerHTML = "";
-  repEmail.innerHTML = "";
-      console.log(worksiteDropdown.value)
-  for (var k = 0; k < dataVar.length; k++) {
-    if (dataVar[k][1] == worksiteDropdown.value) {
-      repName.innerHTML = dataVar[k][2];
-      repNumber.innerHTML = dataVar[k][3];
-      repEmail.innerHTML = dataVar[k][4];
-      emailLink.href = `mailto:${dataVar[k][4]}`;
-    }
+function makeVCard() {
+  let vcard = `BEGIN:VCARD
+${makeVCardVersion()}
+${makeVCardInfo(cardInfoEl.value)}
+${makeVCardName(nameEl.value)}
+${makeVCardOrg(orgEl.value)}
+${makeVCardTitle(titleEl.value)}
+${makeVCardPhoto(previewEl.src)}
+${makeVCardTel(telEl.value)}
+${makeVCardAdr(addressEl.value)}
+${makeVCardEmail(emailEl.value)}
+${makeVCardTimeStamp()}
+END:VCARD`;
+  downloadToFile(vcard, 'vcard.vcf', 'text/vcard');
 }
-};
-  
-employerDropdown.addEventListener("change", filterWorksites);
-worksiteDropdown.addEventListener("change", displayRepInfo);
 
-getData();
-  });
-});
+downloadEl.addEventListener('click', makeVCard);
+fileEl.addEventListener('change', previewFile);
+
 </script>
 </head>
 <body>
@@ -132,5 +107,6 @@ getData();
   <p><i class="fa-solid fa-square-envelope"></i> <a href="" id="emailLink"><span id="repEmail"></span></a></p>
 </div>
   <p>If you do not see your workplace listed here, please contact us at <strong><a href="mailto:reception@ufcw1518.com">reception@ufcw1518.com</a></strong>.</p>
+    <button id="downloadButton">Save your Rep as a Contact</button>
 </body>
 </html>
