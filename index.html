@@ -51,6 +51,14 @@ const repName = document.getElementById("repName");
 const repNumber = document.getElementById("repNumber");
 const repEmail = document.getElementById("repEmail");
 
+if (employerDropdown.value == "Select") {
+    worksiteDropdownWrapper.style.display = "none";
+    results.style.display = "none";
+} else {
+    worksiteDropdownWrapper.style.display = "initial";
+    results.style.display = "initial";
+}
+
 let dataVar;
 fetch(url)
   .then(response => response.json())
@@ -107,13 +115,6 @@ function filterWorksites() {
 }
   
 function displayRepInfo() {
-  /*if (employerDropdown.value = "Select") {
-    worksiteDropdownWrapper.style.display = "none";
-    results.style.display = "none";
-  } else {
-    worksiteDropdownWrapper.style.display = "initial";
-    results.style.display = "initial";
-  }*/
   repName.innerHTML = "";
   repNumber.innerHTML = "";
   repEmail.innerHTML = "";
