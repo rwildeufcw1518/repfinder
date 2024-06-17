@@ -103,15 +103,18 @@ function filterWorksites() {
       opt.innerHTML = worksiteList[j];
       worksiteDropdown.appendChild(opt);
       }
+      if (worksiteList.length <= 1) {
+        worksiteDropdownWrapper.style.display = "none";
+      } else {
+        worksiteDropdownWrapper.style.display = "initial";
+      }
   displayRepInfo();
 }
   
 function displayRepInfo() {
   if (employerDropdown.value == "Select") {
-    worksiteDropdownWrapper.style.display = "none";
     results.style.display = "none";
   } else {
-    worksiteDropdownWrapper.style.display = "initial";
     results.style.display = "initial";
   }
   repName.innerHTML = "";
