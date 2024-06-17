@@ -46,6 +46,7 @@ let url = 'https://sheets.googleapis.com/v4/spreadsheets/' +
 const employerDropdown = document.getElementById("employer");
 const worksiteDropdown = document.getElementById("worksite");
 const worksiteDropdownWrapper = document.getElementById("worksites");
+const results = document.getElementById("results");
 const repName = document.getElementById("repName");
 const repNumber = document.getElementById("repNumber");
 const repEmail = document.getElementById("repEmail");
@@ -88,6 +89,13 @@ function downloadToFile(content, filename, contentType) {
 }
 
 function filterWorksites() {
+  if (employerDropdown.innerHTML = "Select") {
+    worksiteDropdown.style.display = "none";
+    results.style.display = "none";
+  } else {
+    worksiteDropdown.style.display = "initial";
+    results.style.display = "initial";
+  }
   worksiteDropdown.innerHTML = "";
     let worksiteList = [];
     for (var i = 0; i < dataVar.length; i++) {
